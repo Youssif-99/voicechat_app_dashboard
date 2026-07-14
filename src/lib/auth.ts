@@ -10,7 +10,7 @@ export type SessionPayload = {
   adminId: string;
   name: string;
   email: string;
-  role: "SUPER_ADMIN" | "ADMIN";
+  role: string;
 };
 
 export async function hashPassword(password: string) {

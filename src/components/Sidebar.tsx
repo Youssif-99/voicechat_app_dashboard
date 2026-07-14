@@ -9,7 +9,7 @@ const NAV_ITEMS = [
   { href: "/admins", label: "المشرفون", icon: "⬡", superOnly: true },
 ];
 
-export function Sidebar({ role }: { role: "SUPER_ADMIN" | "ADMIN" }) {
+export function Sidebar({ role }: { role: string }) {
   return (
     <aside className="w-64 shrink-0 bg-base-surface border-l border-base-border flex flex-col h-screen sticky top-0">
       <div className="px-5 py-6 border-b border-base-border">

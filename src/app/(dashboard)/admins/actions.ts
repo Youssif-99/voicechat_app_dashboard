@@ -17,7 +17,7 @@ export async function createAdmin(formData: FormData) {
   const name = String(formData.get("name") || "").trim();
   const email = String(formData.get("email") || "").trim().toLowerCase();
   const password = String(formData.get("password") || "");
-  const role = String(formData.get("role") || "ADMIN") as "ADMIN" | "SUPER_ADMIN";
+  const role = String(formData.get("role") || "ADMIN");
 
   if (!name || !email || password.length < 6) return;
 
