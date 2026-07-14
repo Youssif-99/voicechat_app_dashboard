@@ -1,0 +1,82 @@
+// قاعدة بيانات لوحة تحكم تطبيق غرف الدردشة الصوتية
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+}
+
+model Agency {
+  id              String   @id @default(cuid())
+  name            String
+  ownerName       String
+  phone           String
+  email           String?
+  status          String   @default("PENDING")
+  level           String   @default("عادي")
+  commissionRate  Float    @default(0.30)
+  totalEarnings   Float    @default(0)
+  notes           String?
+  createdAt       DateTime @default(now())
+  reviewedAt      DateTime?
+  hosts           User[]
+}
+
+model User {
+  id            String   @id @default(cuid())
+  username      String   @unique
+  displayName   String
+  avatarUrl     String?
+  phone         String?
+  email         String?
+  deviceId      String?
+  coins         Int      @default(0)
+  vipLevel      Int      @default(0)
+  isAgent       Boolean  @default(false)
+  isHost        Boolean  @default(false)
+  status        String   @default("ACTIVE")
+  banType       String?
+  banReason     String?
+  banExpiresAt  DateTime?
+  createdAt     DateTime @default(now())
+  agencyId      String?
+  agency        Agency?  @relation(fields: [agencyId], references: [id])
+  rooms         Room[]   @relation("RoomOwner")
+  payments      Payment[]
+}
+
+model Room {
+  id          String   @id @default(cuid())
+  name        String
+  coverUrl    String?
+  seatsLimit  Int      @default(20)
+  type        String   @default("PUBLIC")
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  ownerId     String
+  owner       User     @relation("RoomOwner", fields: [ownerId], references: [id])
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  type        String
+  amount      Float
+  currency    String   @default("USD")
+  status      String   @default("SUCCESS")
+  description String?
+  createdAt   DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
